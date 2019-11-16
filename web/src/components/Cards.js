@@ -23,7 +23,6 @@ export const Cards = props => {
     ...to(i),
     from: from(i)
   })); // Create a bunch of springs using the helpers above
-  const [overlayEmoji, setOverlayEmoji] = useState(null);
   const [throwMode, setThrowMode] = useState(null);
 
   // Create a gesture, we're interested in down-state, delta (current-pos - click-pos), direction and velocity
@@ -37,26 +36,23 @@ export const Cards = props => {
       velocity,
       last
     }) => {
-      if (last || mx === 0) {
-        setOverlayEmoji(null);
-        setOverlayText(null);
-      } else if (mx < -200) {
-        setOverlayEmoji("🤦‍♀️");
-        setOverlayText("I threw almost all of it");
-      } else if (mx < -150) {
-        setOverlayEmoji("🙎‍♀️");
-        setOverlayText("About half left");
-      } else if (mx < -40) {
-        setOverlayEmoji("🤷‍♀️");
-        setOverlayText("There was some left");
+      console.log(down);
+      const dir = xDir < 0 ? -1 : 1; // Direction should either point left or right
+
+      if (down) {
+        if (mx < -200) {
+          setThrowMode("ALMOST_ALL");
+        } else if (mx < -150) {
+          setThrowMode("ABOUT_HALF");
+        } else if (mx < -40) {
+          setThrowMode("SOME_LEFT");
+        }
+      } else if (velocity > 0.2 || throwMode) {
+        gone.add(index);
+        props.onFlick(dir, throwMode);
+        setThrowMode(null);
       }
 
-      const trigger = velocity > 0.2; // If you flick hard enough it should trigger the card to fly out
-      const dir = xDir < 0 ? -1 : 1; // Direction should either point left or right
-      if (!down && trigger) {
-        gone.add(index);
-        props.onFlick(dir, )
-      } // If button/finger's up and trigger velocity is reached, we flag the card ready to fly out
       set(i => {
         if (index !== i) return; // We're only interested in changing spring-data for the current spring
         const isGone = gone.has(index);
@@ -90,15 +86,31 @@ export const Cards = props => {
           alignItems: "center",
           justifyContent: "center",
           color: "white",
-          background: overlayText ? "rgba(0,0,0,0.7)" : "rgba(0,0,0,0)",
+          background: throwMode ? "rgba(0,0,0,0.7)" : "rgba(0,0,0,0)",
           transition: "0.5s",
           zIndex: 1000,
           pointerEvents: "none",
           flexDirection: "column"
         }}
       >
-        <div style={{ display: "flex", fontSize: "3rem" }}>{overlayEmoji}</div>
-        <div style={{ display: "flex", fontSize: "1.5rem" }}>{overlayText}</div>
+        <div style={{ display: "flex", fontSize: "3rem" }}>
+          {
+            {
+              ALMOST_ALL: "🤦‍♀️",
+              ABOUT_HALF: "🙎‍♀️",
+              SOME_LEFT: "🤷‍♀️"
+            }[throwMode]
+          }
+        </div>
+        <div style={{ display: "flex", fontSize: "1.5rem" }}>
+          {
+            {
+              ALMOST_ALL: "I threw almost all of it",
+              ABOUT_HALF: "Roughly half left",
+              SOME_LEFT: "There was some left"
+            }[throwMode]
+          }
+        </div>
       </div>
       {springProps.map(({ x, y, rot, scale }, i) => (
         <animated.div className="card-container" key={i} style={{ x, y }}>
