@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./App.css";
 import { Cards } from "./components/Cards";
 
@@ -9,7 +9,8 @@ const expiredProducts = [
     imageURL:
       "https://foodieimages.s3.amazonaws.com/images/entries/320x480/6415712506032_0.png",
     price: 2.0,
-    category: "dairy"
+    category: "dairy",
+    expirationDate: "20-10-2019"
   },
   {
     id: "kaura2",
@@ -17,7 +18,8 @@ const expiredProducts = [
     imageURL:
       "https://www.myllynparas.fi/sites/default/files/styles/article_image/public/thumbnails/image/Kaura-h%C3%A4rk%C3%A4papurouhe_0.jpg?itok=IEhU_dgH",
     price: 5,
-    category: "grain"
+    category: "grain",
+    expirationDate: "20-11-2019"
   },
   {
     id: "omena",
@@ -25,9 +27,19 @@ const expiredProducts = [
     imageURL:
       "https://i5.walmartimages.ca/images/Enlarge/094/514/6000200094514.jpg",
     price: 2.0,
-    category: "fruit"
+    category: "fruit",
+    expirationDate: "18-11-2019"
   }
 ];
+
+export const actionFlashEmojiLookup = {
+  THROW_ALL: "😱",
+  THROW_ALMOST_ALL: "🤦‍♀️",
+  THROW_ABOUT_HALF: "🙎‍♀️",
+  THROW_SOME_LEFT: "🤷‍♀️",
+  EAT: "😋",
+  KEEP: "📦"
+};
 
 function App() {
   // const [currentProduct, setCurrentProduct] = useState(0);
@@ -51,11 +63,10 @@ function App() {
   const [flickedStuff, setFlickedStuff] = useState([]);
 
   const allFlicked = flickedStuff.length === expiredProducts.length;
-  const wastedMoney = flickedStuff
-    .reduce((acc, p) => {
-      acc = acc + p.wastedMoney;
-      return acc;
-    }, 0);
+  const wastedMoney = flickedStuff.reduce((acc, p) => {
+    acc = acc + p.wastedMoney;
+    return acc;
+  }, 0);
 
   return (
     <>
@@ -78,19 +89,20 @@ function App() {
             animationFillMode: "forward"
           }}
         >
-          {{ BAD: "😱", GOOD: "😋" }[flash]}
+          {flash}
         </div>
       )}
       {allFlicked ? (
         <div
           style={{
-            height: '100%',
+            height: "100%",
             display: "flex",
-            alignItems: 'center',
-            justifyContent: 'center',
+            alignItems: "center",
+            justifyContent: "center",
             fontSize: "2rem",
             animation: "appear 2s",
-            animationFillMode: "forward"
+            animationFillMode: "forward",
+            color: "white"
           }}
         >
           {wastedMoney === 0
@@ -99,18 +111,23 @@ function App() {
         </div>
       ) : (
         <Cards
+          date={Date.now()}
           itemImages={expiredProducts.map(i => i.imageURL)}
-          onFlick={(index, dir, mode) => {
+          itemExpirationDates={expiredProducts.map(i => i.expirationDate)}
+          onFlick={(index, action) => {
+            console.log(index, action);
             // throwAwayPercentage do something
             // setCurrentProduct(c => c + 1);
-            if (dir === -1) {
-              setFlash(null);
-              setFlash("BAD");
-              const wastePercentage = {
-                ALMOST_ALL: 0.8,
-                ABOUT_HALF: 0.5,
-                SOME_LEFT: 0.2
-              }[mode];
+            setFlash(null);
+            setFlash(actionFlashEmojiLookup[action]);
+            if (action.startsWith("THROW")) {
+              const wastePercentage =
+                {
+                  THROW_ALL: 1,
+                  THROW_ALMOST_ALL: 0.8,
+                  THROW_ABOUT_HALF: 0.5,
+                  THROW_SOME_LEFT: 0.2
+                }[action] || 0;
               const originalProduct = expiredProducts[index];
               setFlickedStuff(t => [
                 ...t,
@@ -120,9 +137,7 @@ function App() {
                 }
               ]);
             }
-            if (dir === 1) {
-              setFlash(null);
-              setFlash("GOOD");
+            if (action === "EAT" || action === "KEEP") {
               const originalProduct = expiredProducts[index];
               setFlickedStuff(t => [
                 ...t,
