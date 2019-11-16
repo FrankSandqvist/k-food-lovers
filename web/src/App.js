@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./App.css";
 import { Cards } from "./components/Cards";
-import { Statistics } from "./func";
+import { Statistics } from "./components/Statistics";
 
 const expiredProducts = [
   /*{
@@ -110,7 +110,7 @@ const expiredProducts = [
     price: 3.99,
     category: "Convenience Foods",
     expirationDate: "17-11-2019"
-  },*/
+  },
   {
     id: "nyhtokaura",
     title: "Nyhto Kaura",
@@ -196,7 +196,7 @@ function App() {
             display: "flex",
             flexDirection: "column"
           }}
-        > 
+        >
         <div>
           {wastedMoney === 0
             ? "YOU ROCK!"
