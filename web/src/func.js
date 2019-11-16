@@ -54,18 +54,18 @@ export const Statistics = props => {
       price: reducedPrice / (fullPrice + reducedPrice)
     }
   ];
-  const COLORS = ["#0088FE", "#ff6900", "#FFBB28", "#FF8042", "#ff6900"];
+  const COLORS = ["#ffffff", "#ff6900", "#FFBB28", "#FF8042", "#ff6900"];
   return (
     <PieChart width={800} height={400}>
       <Pie
         data={data}
         cx={420}
         cy={200}
-        startAngle={180}
-        endAngle={0}
-        innerRadius={60}
-        outerRadius={80}
-        fill="#8884d8"
+        // startAngle={180}
+        // endAngle={0}
+        innerRadius={80}
+        outerRadius={90}
+        // fill="#8884d8"
         paddingAngle={5}
         dataKey="price"
       >
