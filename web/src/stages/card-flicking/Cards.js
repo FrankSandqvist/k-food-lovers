@@ -2,7 +2,7 @@ import React, { useState, useMemo } from "react";
 import { useSprings, animated, to as interpolate } from "react-spring";
 import { useDrag } from "react-use-gesture";
 import "./Cards.css";
-import { actionFlashEmojiLookup } from "../App.js";
+import { actionFlashEmojiLookup } from "../../misc/lookup";
 
 // These two are just helpers, they curate spring data, values that are later being interpolated into css
 const to = i => ({
@@ -104,6 +104,7 @@ export const Cards = props => {
       bottom: (0.5 + Math.random() * 2).toFixed(1) + "rem",
       transform: "rotate(" + (2 - Math.random() * 4).toFixed(1) + "deg)"
     }));
+    // eslint-disable-next-line
   }, [props.itemExpirationDates.length]);
 
   // Now we're just mapping the animated values to our view, that's it. Btw, this component only renders once. :-)
