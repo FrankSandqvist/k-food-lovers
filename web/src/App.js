@@ -1,18 +1,40 @@
-import React from "react";
-import logo from "./logo.svg";
-import Button from "@material-ui/core/Button";
+import React, { useState } from "react";
 import "./App.css";
+import { Slider } from "./components/slider";
+
+const products = [
+  {
+    id: "maito1",
+    title: "Maito",
+    imageURL: "https://",
+    price: 2.0
+  },
+  {
+    id: "kaura2",
+    title: "Kaura",
+    imageURL: "https://",
+    price: 1.55
+  },
+  {
+    id: "omena",
+    title: "Omena",
+    imageURL: "https://",
+    price: 24
+  }
+];
 
 function App() {
+  const [currentProduct, setCurrentProduct] = useState(0);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Helthie Foodie</p>
-        <Button variant="contained" color="primary">
-          Hello World
-        </Button>
-      </header>
+      <Slider
+        item={products[currentProduct]}
+        onDone={throwAwayPercentage => {
+          // throwAwayPercentage do something
+          setCurrentProduct(c => c + 1);
+        }}
+      />
     </div>
   );
 }
