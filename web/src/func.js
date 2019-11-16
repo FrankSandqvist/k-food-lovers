@@ -1,79 +1,60 @@
-import React, { PureComponent } from "react";
+import React from "react";
 import {
-  BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, PieChart,
-  Pie, Sector 
+  BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, /*Legend,*/ PieChart,
+  Pie, /*Sector*/ 
 } from 'recharts';
 
-const products = [
-  {
-    id: "maito1",
-    title: "Maito",
-    imageURL: "https://",
-    category: "dairy",
-    price: 2.0
-  },
-  {
-    id: "kaura2",
-    title: "Kaura",
-    imageURL: "https://",
-    category: "vilja",
-    price: 1.55
-  },
-  {
-    id: "omena",
-    title: "Omena",
-    imageURL: "https://",
-    category: "fruit",
-    price: 24
-  },
-  {
-    id: "omena2",
-    title: "Omena",
-    category: "fruit",
-    price: 30
-  }
-];
+// function processRawData(data) {
+//   var chartData = {
+//     header: ["Product Group", "Wasted Money"],
+//     rows: []
+//   };
+//   for (var i = 0; i < data.length; i++) {
+//     const item = data[i];
+//     const foundRow = chartData.rows.find(row => row[0] === item.category);
+//     if(foundRow) {
+//       foundRow[1] = foundRow[1] + item.price;
+//     } else {
+//       chartData.rows.push([item.category, item.price])
+//     }
+//   }
+//   return chartData.rows.map(([name, price]) => ({name, price}));
+// };
 
-function processRawData(data) {
-  var chartData = {
-    header: ["Product Group", "Wasted Money"],
-    rows: []
-  };
-  for (var i = 0; i < data.length; i++) {
-    const item = data[i];
-    const foundRow = chartData.rows.find(row => row[0] === item.category);
-    if(foundRow) {
-      foundRow[1] = foundRow[1] + item.price;
-    } else {
-      chartData.rows.push([item.category, item.price])
+
+
+// export const Statistics2 = (props) => {
+//     var data = processRawData(props.raw_data);
+//     return (
+//       <BarChart
+//         width={500}
+//         height={300}
+//         data={data}
+//         margin={{
+//           top: 5, right: 30, left: 20, bottom: 5,
+//         }}
+//       >
+//         <CartesianGrid strokeDasharray="3 3" />
+//         <XAxis dataKey="name" />
+//         <YAxis />
+//         <Bar dataKey="price" fill="8884d8" />
+//         <Tooltip />
+//       </BarChart>
+//     );
+// }
+
+export const Statistics = props => {
+  // const data2 = processRawData(props.raw_data);
+  const fullPrice = props.raw_data.reduce((acc, { price }) => acc + price, 0);
+  const reducedPrice = props.wasted_price;
+  const data = [
+    { name: "Used Products", price: fullPrice / (fullPrice + reducedPrice) },
+    {
+      name: "Wasted Products",
+      price: reducedPrice / (fullPrice + reducedPrice)
     }
-  }
-  return chartData.rows.map(([name, price]) => ({name, price}));
-};
-
-export const Statistics = (props) => {
-    var data = processRawData(props.raw_data);
-    return (
-      <BarChart
-        width={500}
-        height={300}
-        data={data}
-        margin={{
-          top: 5, right: 30, left: 20, bottom: 5,
-        }}
-      >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" />
-        <YAxis />
-        <Bar dataKey="price" fill="8884d8" />
-        <Tooltip />
-      </BarChart>
-    );
-}
-
-export const Statistics2 = props => {
-  const data = processRawData(props.raw_data);
-  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+  ];
+  const COLORS = ["#0088FE", "#ff6900", "#FFBB28", "#FF8042", "#ff6900"];
   return (
     <PieChart width={800} height={400}>
       <Pie
