@@ -1,5 +1,5 @@
 import React from "react";
-import { BarChart, Bar, Cell, PieChart, Pie } from "recharts";
+import { Cell, PieChart, Pie } from "recharts";
 
 export const Statistics = props => {
   const fullPrice = props.raw_data.reduce((acc, { price }) => acc + price, 0);
