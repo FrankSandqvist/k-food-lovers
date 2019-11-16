@@ -4,7 +4,7 @@ import { Cards } from "./components/Cards";
 import { Statistics } from "./func";
 
 const expiredProducts = [
-  {
+  /*{
     id: "maitorasv",
     title: "Maito",
     imageURL:
@@ -101,7 +101,7 @@ const expiredProducts = [
     price: 2.49,
     category: "Oat Products",
     expirationDate: "15-11-2019"
-  },
+  },*/
   {
     id: "freshsalaatti",
     title: "Kreikkalainen Salaatti",
