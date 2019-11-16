@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./App.css";
 import { Cards } from "./components/Cards";
-import { Statistics } from "./func";
+import { Statistics } from "./components/Statistics";
 
 const expiredProducts = [
   /*{
@@ -22,7 +22,7 @@ const expiredProducts = [
     category: "Juice",
     expirationDate: "14-11-2019"
   },
-  {
+  /*{
     id: "omena",
     title: "Omena",
     imageURL:
@@ -192,9 +192,11 @@ function App() {
             fontSize: "2rem",
             animation: "appear 2s",
             animationFillMode: "forward",
-            color: "white"
+            color: "white",
+            display: "flex",
+            flexDirection: "column"
           }}
-        > 
+        >
         <div>
           {wastedMoney === 0
             ? "YOU ROCK!"

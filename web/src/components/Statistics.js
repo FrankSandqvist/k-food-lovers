@@ -13,7 +13,8 @@ export const Statistics = props => {
   ];
   const COLORS = ["#ffffff", "#ff6900", "#FFBB28", "#FF8042", "#ff6900"];
   return (
-    <PieChart width={800} height={400}>
+    <PieChart width={200} height={200}>
+      <text cx="100" cy="100">Test</text>
       <Pie
         data={data}
         cx={420}
