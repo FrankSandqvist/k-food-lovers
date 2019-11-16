@@ -1,4 +1,4 @@
-import React, { useState, /*useEffect*/ } from "react";
+import React, { useState } from "react";
 import "./App.css";
 import { Cards } from "./components/Cards";
 import { Statistics } from "./func";
@@ -122,6 +122,15 @@ const expiredProducts = [
   }
 ];
 
+export const actionFlashEmojiLookup = {
+  THROW_ALL: "😱",
+  THROW_ALMOST_ALL: "🤦‍♀️",
+  THROW_ABOUT_HALF: "🙎‍♀️",
+  THROW_SOME_LEFT: "🤷‍♀️",
+  EAT: "😋",
+  KEEP: "📦"
+};
+
 function App() {
   // const [currentProduct, setCurrentProduct] = useState(0);
   document.addEventListener(
@@ -144,11 +153,10 @@ function App() {
   const [flickedStuff, setFlickedStuff] = useState([]);
 
   const allFlicked = flickedStuff.length === expiredProducts.length;
-  const wastedMoney = flickedStuff
-    .reduce((acc, p) => {
-      acc = acc + p.wastedMoney;
-      return acc;
-    }, 0);
+  const wastedMoney = flickedStuff.reduce((acc, p) => {
+    acc = acc + p.wastedMoney;
+    return acc;
+  }, 0);
 
   return (
     <>
@@ -171,19 +179,20 @@ function App() {
             animationFillMode: "forward"
           }}
         >
-          {{ BAD: "😱", GOOD: "😋" }[flash]}
+          {flash}
         </div>
       )}
       {allFlicked ? (
         <div
           style={{
-            height: '100%',
+            height: "100%",
             display: "flex",
-            alignItems: 'center',
-            justifyContent: 'center',
+            alignItems: "center",
+            justifyContent: "center",
             fontSize: "2rem",
             animation: "appear 2s",
-            animationFillMode: "forward"
+            animationFillMode: "forward",
+            color: "white"
           }}
         > 
         <div>
@@ -200,18 +209,23 @@ function App() {
         </div>
       ) : (
         <Cards
+          date={Date.now()}
           itemImages={expiredProducts.map(i => i.imageURL)}
-          onFlick={(index, dir, mode) => {
+          itemExpirationDates={expiredProducts.map(i => i.expirationDate)}
+          onFlick={(index, action) => {
+            console.log(index, action);
             // throwAwayPercentage do something
             // setCurrentProduct(c => c + 1);
-            if (dir === -1) {
-              setFlash(null);
-              setFlash("BAD");
-              const wastePercentage = {
-                ALMOST_ALL: 0.8,
-                ABOUT_HALF: 0.5,
-                SOME_LEFT: 0.2
-              }[mode];
+            setFlash(null);
+            setFlash(actionFlashEmojiLookup[action]);
+            if (action.startsWith("THROW")) {
+              const wastePercentage =
+                {
+                  THROW_ALL: 1,
+                  THROW_ALMOST_ALL: 0.8,
+                  THROW_ABOUT_HALF: 0.5,
+                  THROW_SOME_LEFT: 0.2
+                }[action] || 0;
               const originalProduct = expiredProducts[index];
               setFlickedStuff(t => [
                 ...t,
@@ -221,9 +235,7 @@ function App() {
                 }
               ]);
             }
-            if (dir === 1) {
-              setFlash(null);
-              setFlash("GOOD");
+            if (action === "EAT" || action === "KEEP") {
               const originalProduct = expiredProducts[index];
               setFlickedStuff(t => [
                 ...t,
