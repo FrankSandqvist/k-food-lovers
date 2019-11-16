@@ -22,7 +22,7 @@ const expiredProducts = [
     category: "Juice",
     expirationDate: "14-11-2019"
   },
-  {
+  /*{
     id: "omena",
     title: "Omena",
     imageURL:
@@ -110,7 +110,7 @@ const expiredProducts = [
     price: 3.99,
     category: "Convenience Foods",
     expirationDate: "17-11-2019"
-  },
+  },*/
   {
     id: "nyhtokaura",
     title: "Nyhto Kaura",
@@ -192,7 +192,9 @@ function App() {
             fontSize: "2rem",
             animation: "appear 2s",
             animationFillMode: "forward",
-            color: "white"
+            color: "white",
+            display: "flex",
+            flexDirection: "column"
           }}
         > 
         <div>

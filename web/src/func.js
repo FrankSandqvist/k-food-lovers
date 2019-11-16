@@ -1,8 +1,15 @@
 import React from "react";
 import {
-  BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, /*Legend,*/ PieChart,
-  Pie, /*Sector*/ 
-} from 'recharts';
+  BarChart,
+  Bar,
+  Cell,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  /*Legend,*/ PieChart,
+  Pie /*Sector*/
+} from "recharts";
 
 // function processRawData(data) {
 //   var chartData = {
@@ -20,8 +27,6 @@ import {
 //   }
 //   return chartData.rows.map(([name, price]) => ({name, price}));
 // };
-
-
 
 // export const Statistics2 = (props) => {
 //     var data = processRawData(props.raw_data);
@@ -56,17 +61,15 @@ export const Statistics = props => {
   ];
   const COLORS = ["#ffffff", "#ff6900", "#FFBB28", "#FF8042", "#ff6900"];
   return (
-    <PieChart width={800} height={400}>
+    <PieChart width={200} height={200}>
+      <text cx="100" cy="100">Test</text>
       <Pie
         data={data}
-        cx={420}
-        cy={200}
-        // startAngle={180}
-        // endAngle={0}
+        cx={100}
+        cy={100}
         innerRadius={80}
         outerRadius={90}
         // fill="#8884d8"
-        paddingAngle={5}
         dataKey="price"
       >
         {data.map((entry, index) => (
