@@ -36,8 +36,7 @@ export const Cards = props => {
       velocity,
       last
     }) => {
-      console.log(down);
-      const dir = xDir < 0 ? -1 : 1; // Direction should either point left or right
+      let dir = throwMode || xDir < 0 ? -1 : 1; // Direction should either point left or right
 
       if (down) {
         if (mx < -200) {
@@ -46,10 +45,12 @@ export const Cards = props => {
           setThrowMode("ABOUT_HALF");
         } else if (mx < -40) {
           setThrowMode("SOME_LEFT");
+        } else {
+          setThrowMode(null);
         }
       } else if (velocity > 0.2 || throwMode) {
         gone.add(index);
-        props.onFlick(dir, throwMode);
+        props.onFlick(index, dir, throwMode);
         setThrowMode(null);
       }
 
