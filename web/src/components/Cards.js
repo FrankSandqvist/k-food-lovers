@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { useSprings, animated, to as interpolate } from "react-spring";
 import { useDrag } from "react-use-gesture";
 import "./Cards.css";
@@ -98,6 +98,14 @@ export const Cards = props => {
     }
   );
 
+  const labelStyles = useMemo(() => {
+    return props.itemExpirationDates.map(() => ({
+      right: (0.5 + Math.random() * 2).toFixed(1) + "rem",
+      bottom: (0.5 + Math.random() * 2).toFixed(1) + "rem",
+      transform: "rotate(" + (2 - Math.random() * 4).toFixed(1) + "deg)"
+    }));
+  }, [props.itemExpirationDates.length]);
+
   // Now we're just mapping the animated values to our view, that's it. Btw, this component only renders once. :-)
   return (
     <>
@@ -142,8 +150,9 @@ export const Cards = props => {
       </div>
       {springProps.map(({ x, y, rot, scale }, i) => {
         const [day, month, year] = props.itemExpirationDates[i].split("-");
-        const date = new Date(year, month, day);
-        const diff = Math.round((date - props.date) / 1000 / 60 / 60 / 24);
+        const date = new Date(year, month - 1, day);
+        console.log(+date, props.date);
+        const diff = Math.round((+date - +props.date) / 1000 / 60 / 60 / 24);
 
         return (
           <animated.div className="card-container" key={i} style={{ x, y }}>
@@ -159,17 +168,21 @@ export const Cards = props => {
             >
               <div
                 style={{
+                  ...labelStyles[i],
                   position: "absolute",
-                  right: "2rem",
-                  bottom: "2rem",
-                  backgroundColor: "crimson",
+
+                  backgroundColor: diff > 0 ? "black" : "crimson",
                   padding: "0.5rem",
                   borderRadius: "0.3rem",
                   color: "white",
                   fontFamily: "Impact Label, sans serif"
                 }}
               >
-                Expired {diff} days ago
+                {diff > 0
+                  ? "Expires in " + diff + " days."
+                  : diff === 0
+                  ? "Expires today"
+                  : "Expired " + Math.abs(diff) + " days ago."}
               </div>
             </animated.div>
           </animated.div>
