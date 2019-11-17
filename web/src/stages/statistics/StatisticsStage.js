@@ -41,7 +41,7 @@ export const StatisticsStage = props => {
             <div style={{ fontSize: "4rem", marginBottom: "2rem" }}>
               {wastedPrice.toFixed(2) + " € "}
             </div>
-            <div style={{ marginBottom: "1rem" }}>...which means you used:</div>
+            <div style={{ marginBottom: "1rem" }}>...which means you wasted:</div>
           </>
         )}
         <PieChart width={200} height={200}>
