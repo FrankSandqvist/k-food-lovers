@@ -6,7 +6,6 @@ import { CardFlickingStage } from "./stages/card-flicking/CardFlickingStage";
 import { StatisticsStage } from "./stages/statistics/StatisticsStage";
 
 export const App = () => {
-  // const [currentProduct, setCurrentProduct] = useState(0);
   document.addEventListener(
     "touchmove",
     event => {
@@ -18,39 +17,33 @@ export const App = () => {
   const [stage, setStage] = useState(0);
   const [wastedProducts, setWastedProducts] = useState(null);
 
-  if (stage === 0) {
-    return (
-      <StartStage
-        onDone={() => {
-          setStage(1);
-        }}
-      />
-    );
-  }
-
-  if (stage === 1) {
-    return (
-      <CardFlickingStage
-        onDone={wasted => {
-          setWastedProducts(wasted);
-          setStage(2);
-        }}
-        products={products}
-      />
-    );
-  }
-
-  if (stage === 2) {
-    return (
-      <StatisticsStage
-        products={products}
-        wastedProducts={wastedProducts}
-        onReset={() => {
-          setStage(0);
-        }}
-      />
-    );
-  }
+  return (
+    <div className="stage-container">
+      {stage === 0 ? (
+        <StartStage
+          onDone={() => {
+            setStage(1);
+          }}
+        />
+      ) : stage === 1 ? (
+        <CardFlickingStage
+          onDone={wasted => {
+            setWastedProducts(wasted);
+            setStage(2);
+          }}
+          products={products}
+        />
+      ) : (
+        <StatisticsStage
+          products={products}
+          wastedProducts={wastedProducts}
+          onReset={() => {
+            setStage(0);
+          }}
+        />
+      )}
+    </div>
+  );
 };
 
 export default App;

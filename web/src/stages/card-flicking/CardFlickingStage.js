@@ -44,9 +44,6 @@ export const CardFlickingStage = props => {
         itemImages={products.map(i => i.imageURL)}
         itemExpirationDates={products.map(i => i.expirationDate)}
         onFlick={(index, action) => {
-          console.log(index, action);
-          // throwAwayPercentage do something
-          // setCurrentProduct(c => c + 1);
           setFlash(null);
           setFlash(actionFlashEmojiLookup[action]);
           if (action.startsWith("THROW")) {

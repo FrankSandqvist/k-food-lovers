@@ -1,29 +1,9 @@
-.App {
-  text-align: center;
-  height: 100%;
-}
-
-.SliderContainer {
-  text-align: center;
-  position: absolute;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-}
-
-.TextOverlay {
-  text-align: center;
-  position: absolute;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
+.stage-container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  font-size: 2rem;
-  z-index: 1000;
+  justify-content: space-around;
+  height: 100%;
 }
 
 @keyframes appear {

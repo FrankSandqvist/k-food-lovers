@@ -4,7 +4,6 @@ import { useDrag } from "react-use-gesture";
 import "./Cards.css";
 import { actionFlashEmojiLookup } from "../../misc/lookup";
 
-// These two are just helpers, they curate spring data, values that are later being interpolated into css
 const to = i => ({
   x: 0,
   y: i * -4,
@@ -13,7 +12,7 @@ const to = i => ({
   delay: i * 100
 });
 const from = i => ({ x: 0, rot: 0, scale: 1.5, y: -1000 });
-// This is being used down there in the view, it interpolates rotation and scale into a css transform
+
 const trans = (r, s) =>
   `perspective(1500px) rotateX(30deg) rotateY(${r /
     10}deg) rotateZ(${r}deg) scale(${s})`;
@@ -24,14 +23,13 @@ const heightSection = document.body.clientHeight / 4;
 
 export const Cards = props => {
   const [goneX] = useState(() => new Set()); // The set flags all the cards that are flicked out
-  const [goneY] = useState(() => new Set()); // The set flags all the cards that are flicked out
+  const [goneY] = useState(() => new Set());
   const [springProps, set] = useSprings(props.itemImages.length, i => ({
     ...to(i),
     from: from(i)
   })); // Create a bunch of springs using the helpers above
   const [[action, hideAction], setAction] = useState([null, null]);
 
-  // Create a gesture, we're interested in down-state, delta (current-pos - click-pos), direction and velocity
   const bind = useDrag(
     ({
       args: [index],
@@ -42,8 +40,9 @@ export const Cards = props => {
       velocity,
       last
     }) => {
+      // Direction should either point left or right
       const xDir =
-        (action && action.startsWith("THROW")) || direction.xDir < 0 ? -1 : 1; // Direction should either point left or right
+        (action && action.startsWith("THROW")) || direction.xDir < 0 ? -1 : 1;
 
       if (down) {
         if (my < -heightSection) {
@@ -76,12 +75,16 @@ export const Cards = props => {
       }
 
       set(i => {
-        if (index !== i) return; // We're only interested in changing spring-data for the current spring
+        // We're only interested in changing spring-data for the current spring
+        if (index !== i) return;
         const isGoneX = goneX.has(index);
-        const x = isGoneX ? (200 + window.innerWidth) * xDir : down ? mx : 0; // When a card is gone it flys out left or right, otherwise goes back to zero
+        // When a card is gone it flys out left or right, otherwise goes back to zero
+        const x = isGoneX ? (200 + window.innerWidth) * xDir : down ? mx : 0;
         const isGoneY = goneY.has(index);
-        const y = isGoneY ? -window.innerHeight : down ? my : 0; // When a card is gone it flys out left or right, otherwise goes back to zero
-        const rot = mx / 100 + (isGoneX ? xDir * 10 * velocity : 0); // How much the card tilts, flicking it harder makes it rotate faster
+        // When a card is gone it flys out left or right, otherwise goes back to zero
+        const y = isGoneY ? -window.innerHeight : down ? my : 0;
+        // How much the card tilts, flicking it harder makes it rotate faster
+        const rot = mx / 100 + (isGoneX ? xDir * 10 * velocity : 0);
         const scale = down ? 1.1 : 1; // Active cards lift up a bit
         return {
           x,
@@ -107,7 +110,6 @@ export const Cards = props => {
     // eslint-disable-next-line
   }, [props.itemExpirationDates.length]);
 
-  // Now we're just mapping the animated values to our view, that's it. Btw, this component only renders once. :-)
   return (
     <>
       <div
